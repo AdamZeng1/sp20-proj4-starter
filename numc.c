@@ -159,16 +159,16 @@ static PyObject *Matrix61c_repr(PyObject *self) {
 
 /* For __getitem__. (e.g. mat[0]) */
 static PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
-	if (!PyLong_Check(key)) {
-		PyErr_SetString(PyExc_TypeError, "Key is not valid");
+    if (!PyLong_Check(key)) {
+        PyErr_SetString(PyExc_TypeError, "Key is not valid");
         return NULL;
-	}
-	int index = PyLong_AsLong(key);
-	if (index >= self->mat->rows || index < 0) {
-		PyErr_SetString(PyExc_IndexError, "Index out of range");
+    }
+    int index = PyLong_AsLong(key);
+    if (index >= self->mat->rows || index < 0) {
+        PyErr_SetString(PyExc_IndexError, "Index out of range");
         return NULL;
-	}
-	matrix *new_mat;
+    }
+    matrix *new_mat;
     int ref_failed = allocate_matrix_ref(&new_mat, self->mat, index * self->mat->cols, self->mat->cols, 1);
     if (ref_failed) {
         return NULL;
@@ -177,52 +177,52 @@ static PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     rv->mat = new_mat;
     rv->shape = PyTuple_Pack(2, PyLong_FromLong(new_mat->rows), PyLong_FromLong(1));
     if (new_mat->rows == 1) { // if one single number, unwrap from list
-    	return PyFloat_FromDouble(new_mat->data[0]);
+        return PyFloat_FromDouble(new_mat->data[0]);
     }
     return (PyObject*)rv;
 }
 
 /* For __setitem__ (e.g. mat[0] = 1) */
 static int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
-	if (!PyLong_Check(key)) {
-		PyErr_SetString(PyExc_TypeError, "Key is not valid");
+    if (!PyLong_Check(key)) {
+        PyErr_SetString(PyExc_TypeError, "Key is not valid");
         return -1;
-	}
-	int index = PyLong_AsLong(key);
-	if (index >= self->mat->rows || index < 0) {
-		PyErr_SetString(PyExc_IndexError, "Index out of range");
+    }
+    int index = PyLong_AsLong(key);
+    if (index >= self->mat->rows || index < 0) {
+        PyErr_SetString(PyExc_IndexError, "Index out of range");
         return -1;
-	}
-	int cols = self->mat->cols;
-	if (cols == 1) {
-		if (!PyFloat_Check(v) && !PyLong_Check(v)) {
-			PyErr_SetString(PyExc_TypeError, "Value is not valid");
-	        return -1;
-		}
-		double val = PyFloat_AsDouble(v);
-		set(self->mat, index, 0, val);
-		return 0;
-	} else {
-		if (!PyList_Check(v)) {
-			PyErr_SetString(PyExc_TypeError, "Value is not valid");
-	        return -1;
-		}
-		for (int i = 0; i < cols; i++) {
-			if (!PyFloat_Check(PyList_GetItem(v, i)) && !PyLong_Check(PyList_GetItem(v, i))) {
-				PyErr_SetString(PyExc_TypeError, "Value is not valid");
-	        	return -1;
-			}
-			set(self->mat, index, i, PyFloat_AsDouble(PyList_GetItem(v, i)));
-		}
-		return 0;
-	}
-	return -1;
+    }
+    int cols = self->mat->cols;
+    if (cols == 1) {
+        if (!PyFloat_Check(v) && !PyLong_Check(v)) {
+            PyErr_SetString(PyExc_TypeError, "Value is not valid");
+            return -1;
+        }
+        double val = PyFloat_AsDouble(v);
+        set(self->mat, index, 0, val);
+        return 0;
+    } else {
+        if (!PyList_Check(v)) {
+            PyErr_SetString(PyExc_TypeError, "Value is not valid");
+            return -1;
+        }
+        for (int i = 0; i < cols; i++) {
+            if (!PyFloat_Check(PyList_GetItem(v, i)) && !PyLong_Check(PyList_GetItem(v, i))) {
+                PyErr_SetString(PyExc_TypeError, "Value is not valid");
+                return -1;
+            }
+            set(self->mat, index, i, PyFloat_AsDouble(PyList_GetItem(v, i)));
+        }
+        return 0;
+    }
+    return -1;
 }
 
 static PyMappingMethods Matrix61c_mapping = {
-	NULL,
-	(binaryfunc) Matrix61c_subscript,
-	(objobjargproc) Matrix61c_set_subscript,
+    NULL,
+    (binaryfunc) Matrix61c_subscript,
+    (objobjargproc) Matrix61c_set_subscript,
 };
 
 /* NUMBER METHODS */
@@ -275,7 +275,7 @@ static PyObject *Matrix61c_abs(Matrix61c *self) {
  * Raise numc.Matrix (Matrix61c) to the `pow`th power. You can ignore the argument `optional`.
  */
 static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -313,6 +313,7 @@ static PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
  */
 static PyMethodDef Matrix61c_methods[] = {
     /* TODO: YOUR CODE HERE */
+    {{NULL, NULL, 0, NULL}}
 };
 
 /* INSTANCE ATTRIBUTES*/
