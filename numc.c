@@ -297,7 +297,7 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
 }
 
 /*
- * Given a numc.Matrix `self`, parse `args` to (int) row, (int) col, and (double) val.
+ * Given a numc.Matrix `self`, parse `args` to (int) row and (int) col.
  * This function should return the value at the `row`th row and `col`th column, which is a Python
  * float.
  */
