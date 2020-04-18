@@ -5,7 +5,7 @@ static PyTypeObject Matrix61cType;
 
 /* Helper functions for initalization of matrices and vectors */
 /* Matrix(rows, cols, val). Fill a matrix of dimension rows * cols with val*/
-static int init_fill(PyObject *self, int rows, int cols, int val) {
+static int init_fill(PyObject *self, int rows, int cols, double val) {
     matrix *new_mat;
     int alloc_failed = allocate_matrix(&new_mat, rows, cols);
     if (alloc_failed)
@@ -94,8 +94,11 @@ static int Matrix61c_init(PyObject *self, PyObject *args, PyObject *kwds) {
     PyObject *arg3 = NULL;
     if (PyArg_UnpackTuple(args, "args", 1, 3, &arg1, &arg2, &arg3)) {
         /* arguments are (rows, cols, val) */
-        if (arg1 && arg2 && arg3 && PyLong_Check(arg1) && PyLong_Check(arg2) && PyLong_Check(arg3)) {
-            return init_fill(self, PyLong_AsLong(arg1), PyLong_AsLong(arg2), PyLong_AsLong(arg3));
+        if (arg1 && arg2 && arg3 && PyLong_Check(arg1) && PyLong_Check(arg2) && (PyLong_Check(arg3) || PyFloat_Check(arg3))) {
+            if (PyLong_Check(arg3))
+                return init_fill(self, PyLong_AsLong(arg1), PyLong_AsLong(arg2), PyLong_AsLong(arg3));
+            else
+                return init_fill(self, PyLong_AsLong(arg1), PyLong_AsLong(arg2), PyFloat_AsDouble(arg3));
         } else if (arg1 && arg2 && arg3 && PyLong_Check(arg1) && PyLong_Check(arg2) && PyList_Check(arg3)) {
             /* Matrix(rows, cols, 1D list) */
             return init_1d(self, PyLong_AsLong(arg1), PyLong_AsLong(arg2), arg3);
@@ -114,6 +117,7 @@ static int Matrix61c_init(PyObject *self, PyObject *args, PyObject *kwds) {
         return -1;
     }
 }
+
 
 /* List of lists representations for matrices */
 static PyObject *Matrix61c_to_list(Matrix61c *self) {

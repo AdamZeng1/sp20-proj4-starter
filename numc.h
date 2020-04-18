@@ -13,7 +13,7 @@ typedef struct {
 } Matrix61c;
 
 /* Function definitions */
-static int init_fill(PyObject *self, int rows, int cols, int val);
+static int init_fill(PyObject *self, int rows, int cols, double val);
 static int init_1d(PyObject *self, int rows, int cols, PyObject *lst);
 static int init_2d(PyObject *self, PyObject *lst);
 static void Matrix61c_dealloc(Matrix61c *self);
