@@ -283,7 +283,7 @@ static PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optiona
  * define. You might find this link helpful: https://docs.python.org/3.6/c-api/typeobj.html
  */
 static PyNumberMethods Matrix61c_as_number = {
-   /* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 };
 
 

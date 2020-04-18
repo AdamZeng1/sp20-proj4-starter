@@ -54,7 +54,7 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
  * You cannot assume that mat is not NULL.
  */
 void deallocate_matrix(matrix *mat) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -62,7 +62,7 @@ void deallocate_matrix(matrix *mat) {
  * You may assume `row` and `col` are valid.
  */
 double get(matrix *mat, int row, int col) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -70,14 +70,14 @@ double get(matrix *mat, int row, int col) {
  * `col` are valid
  */
 void set(matrix *mat, int row, int col, double val) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
  * Sets all entries in mat to val
  */
 void fill_matrix(matrix *mat, double val) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -85,7 +85,7 @@ void fill_matrix(matrix *mat, double val) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -93,7 +93,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -102,7 +102,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that matrix multiplication is not the same as multiplying individual elements.
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -111,7 +111,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -119,7 +119,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int neg_matrix(matrix *result, matrix *mat) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
 /*
@@ -127,6 +127,6 @@ int neg_matrix(matrix *result, matrix *mat) {
  * Return 0 upon success and a nonzero value upon failure.
  */
 int abs_matrix(matrix *result, matrix *mat) {
-	/* TODO: YOUR CODE HERE */
+    /* TODO: YOUR CODE HERE */
 }
 
