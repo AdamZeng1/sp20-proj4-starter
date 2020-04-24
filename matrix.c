@@ -44,7 +44,8 @@ void rand_matrix(matrix *result, double low, double high) {
 /*
  * Allocates space for a matrix struct pointed to by the double pointer mat with
  * `rows` rows and `cols` columns. You should also allocate memory for the data array
- * and initialize all entries to be zeros. `free_data` should be set to 1.
+ * and initialize all entries to be zeros. `parent` should be set to NULL to indicate that
+ * this matrix is not a slice. You should also set `ref_cnt` to 1.
  * You should return -1 if either `rows` or `cols` or both have invalid values, or if any
  * call to allocate memory in this function fails. Return 0 upon success.
  */
@@ -55,7 +56,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
 /*
  * Allocates space for a matrix struct pointed to by `mat` with `rows` rows and `cols` columns.
  * Its data should point to the `offset`th entry of `from`'s data (you do not need to allocate memory)
- * for the data field and `free_data` should set to 0.
+ * for the data field. `parent` should be set to `from` to indicate this matrix is a slice of `from`.
  * You should return -1 if either `rows` or `cols` or both are non-positive or if any
  * call to allocate memory in this function fails. Return 0 upon success.
  */
@@ -64,8 +65,9 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
 }
 
 /*
- * This function frees the matrix struct pointed to by `mat`. However, you should free
- * mat->data if and only if mat->free_data is set to a nonzero value.
+ * This function frees the matrix struct pointed to by `mat`. However, you need to make sure that
+ * you only free the data if `mat` is not a slice and has no existing slices, or if `mat` is the
+ * last existing slice of its parent matrix and its parent matrix has no other references.
  * You cannot assume that mat is not NULL.
  */
 void deallocate_matrix(matrix *mat) {
