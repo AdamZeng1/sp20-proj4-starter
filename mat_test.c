@@ -160,7 +160,8 @@ void alloc_fail_test(void) {
 void alloc_success_test(void) {
   matrix *mat = NULL;
   CU_ASSERT_EQUAL(allocate_matrix(&mat, 3, 2), 0);
-  CU_ASSERT_EQUAL(mat->free_data, 1);
+  CU_ASSERT_EQUAL(mat->parent, NULL);
+  CU_ASSERT_EQUAL(mat->ref_cnt, 1);
   CU_ASSERT_EQUAL(mat->rows, 3);
   CU_ASSERT_EQUAL(mat->cols, 2);
   CU_ASSERT_NOT_EQUAL(mat->data, NULL);
@@ -190,8 +191,9 @@ void alloc_ref_success_test(void) {
     }
   }
   CU_ASSERT_EQUAL(allocate_matrix_ref(&mat, from, 2, 2, 2), 0);
-  CU_ASSERT_EQUAL(mat->free_data, 0);
   CU_ASSERT_PTR_EQUAL(mat->data, from->data + 2);
+  CU_ASSERT_PTR_EQUAL(mat->parent, from);
+  CU_ASSERT_EQUAL(mat->parent->ref_cnt, 2);
   CU_ASSERT_EQUAL(mat->rows, 2);
   CU_ASSERT_EQUAL(mat->cols, 2);
   deallocate_matrix(from);
