@@ -26,6 +26,21 @@
  * __m256d _mm256_max_pd (__m256d a, __m256d b)
 */
 
+/* Generates a random double between low and high */
+double rand_double(double low, double high) {
+    double range = (high - low);
+    double div = RAND_MAX / range;
+    return low + (rand() / div);
+}
+
+/* Generates a random matrix */
+void rand_matrix(matrix *result, double low, double high) {
+    srand(42);
+    for (int i = 0; i < result->rows * result->cols; i++) {
+        result->data[i] = rand_double(low, high);
+    }
+}
+
 /*
  * Allocates space for a matrix struct pointed to by the double pointer mat with
  * `rows` rows and `cols` columns. You should also allocate memory for the data array

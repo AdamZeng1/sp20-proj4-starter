@@ -4,6 +4,18 @@
 static PyTypeObject Matrix61cType;
 
 /* Helper functions for initalization of matrices and vectors */
+/* Matrix(rows, cols, low, high). Fill a matrix random double values */
+static int init_rand(PyObject *self, int rows, int cols, double low, double high) {
+    matrix *new_mat;
+    int alloc_failed = allocate_matrix(&new_mat, rows, cols);
+    if (alloc_failed)
+        return alloc_failed;
+    rand_matrix(new_mat, low, high);
+    ((Matrix61c *)self)->mat = new_mat;
+    ((Matrix61c *)self)->shape = PyTuple_Pack(2, PyLong_FromLong(rows), PyLong_FromLong(cols));
+    return 0;
+}
+
 /* Matrix(rows, cols, val). Fill a matrix of dimension rows * cols with val*/
 static int init_fill(PyObject *self, int rows, int cols, double val) {
     matrix *new_mat;
@@ -89,14 +101,68 @@ static PyObject *Matrix61c_new(PyTypeObject *type, PyObject *args, PyObject *kwd
 
 /* This matrix61c type is mutable, so needs init function. Return 0 on success otherwise -1 */
 static int Matrix61c_init(PyObject *self, PyObject *args, PyObject *kwds) {
+    /* Generate random matrices */
+    if (kwds != NULL) {
+        PyObject *rand = PyDict_GetItemString(kwds, "rand");
+        if (!rand) {
+            PyErr_SetString(PyExc_TypeError, "Invalid arguments");
+            return -1;
+        }
+        if (!PyBool_Check(rand)) {
+            PyErr_SetString(PyExc_TypeError, "Invalid arguments");
+            return -1;
+        }
+        if (rand != Py_True) {
+            PyErr_SetString(PyExc_TypeError, "Invalid arguments");
+            return -1;
+        }
+
+        PyObject *low = PyDict_GetItemString(kwds, "low");
+        PyObject *high = PyDict_GetItemString(kwds, "high");
+        double double_low = 0;
+        double double_high = 1;
+
+        if (low) {
+            if (PyFloat_Check(low)) {
+                double_low = PyFloat_AsDouble(low);
+            } else if (PyLong_Check(low)) {
+                double_low = PyLong_AsLong(low);
+            }
+        }
+
+        if (high) {
+            if (PyFloat_Check(high)) {
+                double_high = PyFloat_AsDouble(high);
+            } else if (PyLong_Check(high)) {
+                double_high = PyLong_AsLong(high);
+            }
+        }
+
+        if (double_low >= double_high) {
+            PyErr_SetString(PyExc_TypeError, "Invalid arguments");
+            return -1;
+        }
+
+        PyObject *rows = NULL;
+        PyObject *cols = NULL;
+        if (PyArg_UnpackTuple(args, "args", 2, 2, &rows, &cols)) {
+            if (rows && cols && PyLong_Check(rows) && PyLong_Check(cols)) {
+                return init_rand(self, PyLong_AsLong(rows), PyLong_AsLong(cols), double_low, double_high);
+            }
+        } else {
+            PyErr_SetString(PyExc_TypeError, "Invalid arguments");
+            return -1;
+        }
+    }
     PyObject *arg1 = NULL;
     PyObject *arg2 = NULL;
     PyObject *arg3 = NULL;
-    if (PyArg_UnpackTuple(args, "args", 1, 3, &arg1, &arg2, &arg3)) {
+    if (PyArg_UnpackTuple(args, "args", 2, 3, &arg1, &arg2, &arg3)) {
         /* arguments are (rows, cols, val) */
         if (arg1 && arg2 && arg3 && PyLong_Check(arg1) && PyLong_Check(arg2) && (PyLong_Check(arg3) || PyFloat_Check(arg3))) {
-            if (PyLong_Check(arg3))
+            if (PyLong_Check(arg3)) {
                 return init_fill(self, PyLong_AsLong(arg1), PyLong_AsLong(arg2), PyLong_AsLong(arg3));
+            }
             else
                 return init_fill(self, PyLong_AsLong(arg1), PyLong_AsLong(arg2), PyFloat_AsDouble(arg3));
         } else if (arg1 && arg2 && arg3 && PyLong_Check(arg1) && PyLong_Check(arg2) && PyList_Check(arg3)) {

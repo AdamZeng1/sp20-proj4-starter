@@ -3,10 +3,13 @@
 typedef struct matrix {
     int rows; // number of rows
     int cols; // number of columns
-    int free_data; // 1 if we want to free this data during deallocation, 0 otherwise
     double* data; // pointer to rows * columns doubles
+    int ref_cnt;
+    struct matrix *parent;
 } matrix;
 
+double rand_double(double low, double high);
+void rand_matrix(matrix *result, double low, double high);
 int allocate_matrix(matrix **mat, int rows, int cols);
 int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int cols);
 void deallocate_matrix(matrix *mat);
