@@ -36,8 +36,10 @@ double rand_double(double low, double high) {
 /* Generates a random matrix */
 void rand_matrix(matrix *result, double low, double high) {
     srand(42);
-    for (int i = 0; i < result->rows * result->cols; i++) {
-        result->data[i] = rand_double(low, high);
+    for (int i = 0; i < result->rows; i++) {
+        for (int j = 0; j < result->cols; j++) {
+            set(result, i, j, rand_double(low, high));
+        }
     }
 }
 
