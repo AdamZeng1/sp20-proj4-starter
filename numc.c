@@ -238,6 +238,9 @@ static PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         PyErr_SetString(PyExc_IndexError, "Index out of range");
         return NULL;
     }
+    if (self->mat->cols == 1) { // if one single number, unwrap from list
+        return PyFloat_FromDouble(get(self->mat, index, 0));
+    }
     matrix *new_mat;
     int ref_failed = allocate_matrix_ref(&new_mat, self->mat, index * self->mat->cols, self->mat->cols, 1);
     if (ref_failed) {
@@ -246,9 +249,6 @@ static PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     Matrix61c* rv = (Matrix61c*) Matrix61c_new(&Matrix61cType, NULL, NULL);
     rv->mat = new_mat;
     rv->shape = PyTuple_Pack(2, PyLong_FromLong(new_mat->rows), PyLong_FromLong(1));
-    if (new_mat->rows == 1) { // if one single number, unwrap from list
-        return PyFloat_FromDouble(new_mat->data[0]);
-    }
     return (PyObject*)rv;
 }
 
